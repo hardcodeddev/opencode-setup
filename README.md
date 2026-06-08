@@ -25,6 +25,35 @@ The same machine can be both. For solo desktop use, server and client are localh
 
 ## Quick start
 
+### Already have OpenCode running? Just add the skills
+
+If you already have OpenCode working (with Ollama, Claude, or any other provider), this is all you need on your client machine:
+
+**macOS / Linux:**
+```bash
+git clone https://github.com/hardcodeddev/opencode-setup.git ~/opencode-setup
+cd ~/opencode-setup
+./install.sh
+```
+
+**Windows (PowerShell):**
+```powershell
+git clone https://github.com/hardcodeddev/opencode-setup.git $HOME\opencode-setup
+cd $HOME\opencode-setup
+.\install.ps1
+```
+
+The installer detects what you already have and shows you only the relevant options. It **never overwrites your existing `opencode.json`**. For an existing Ollama + OpenCode setup just pick option 1 — it copies the commands/agents/skills and leaves everything else untouched.
+
+To update later:
+```bash
+cd ~/opencode-setup && git pull && ./install.sh --update
+```
+
+---
+
+### Full setup from scratch
+
 ### 1. Set up the server (run once)
 
 On the machine with the GPU:
@@ -112,6 +141,8 @@ Setup scripts read this file to template the OpenCode config and Ollama variant.
 ```
 opencode-workflow/
 ├── README.md                        # You are here
+├── install.sh                       # Smart installer for macOS/Linux (start here)
+├── install.ps1                      # Smart installer for Windows (start here)
 ├── LICENSE
 ├── .gitignore
 ├── setup/
