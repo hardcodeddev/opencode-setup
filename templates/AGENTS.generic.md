@@ -16,9 +16,13 @@ This document is the source of truth for project conventions, architecture, and 
 3. **MUST** match existing patterns and style.
 4. **MUST NOT** introduce new dependencies without confirming first.
 5. **MUST NOT** commit secrets, credentials, or API keys.
-6. **SHOULD** prefer modifying existing files over creating new ones.
-7. **SHOULD** ask clarifying questions when requirements are ambiguous.
-8. **SHOULD** make commits small and focused.
+6. **MUST NOT** push to `main` or `master` — always use a feature branch.
+7. **MUST NOT** merge pull requests — that is the developer's decision.
+8. **MUST NOT** force-push to any branch that exists on `origin`.
+9. **SHOULD** prefer modifying existing files over creating new ones.
+10. **SHOULD** ask clarifying questions when requirements are ambiguous.
+11. **SHOULD** make commits small and focused (one logical change per commit).
+12. **SHOULD** write or update tests for every behavioral change.
 </rules>
 
 ## Project overview
@@ -97,24 +101,69 @@ Or just describe it in prose: "All source is under `src/`. Tests live next to th
 - **What to test**: behavior, not implementation
 - **What NOT to test**: third-party libraries, framework internals
 - **New features require new tests. Bug fixes require regression tests.**
+
+### Hermetic integration tests
+Integration tests MUST be hermetic — fully self-contained, no real external dependencies:
+- No real database calls — use in-memory DB or Testcontainers
+- No real HTTP calls — use an HTTP interceptor (msw, WireMock, httptest.Server)
+- No real file system paths outside a temp directory
+- No real-world time — inject a fixed clock (`2024-01-15T00:00:00Z`)
+- No shared state between tests — each test sets up and tears down its own data
+- Cleanup runs unconditionally (in `afterEach`/`defer`/`finally`), even on failure
+- Annotate each integration test file: `// Hermetic: yes // Mocked: [list deps]`
 </testing>
 
 ## Git workflow
 
 <git>
-- Branch naming: `<type>/<short-description>` (e.g., `feat/user-auth`, `fix/login-redirect`)
-- Commit format: Conventional Commits — `<type>(<scope>): <description>`
-- Squash on merge to main
-- Never force-push to shared branches
+### Branch protection (non-negotiable)
+- **NEVER push to `main` or `master`** — all work happens on feature branches
+- **NEVER merge a pull request** — PRs are created for developer review, not auto-merged
+- **NEVER force-push** (`--force`) to any shared branch
+- **NEVER use `--no-verify`** to skip commit hooks
+- **NEVER commit secrets** — scan diff for API keys, tokens, passwords before every commit
+
+### Branch naming
+Format: `<type>/<short-description>`
+Types: `feat`, `fix`, `chore`, `docs`, `refactor`, `test`, `perf`, `ci`
+Examples: `feat/user-auth`, `fix/login-redirect`, `chore/upgrade-deps`
+
+### Commit format: Conventional Commits
+```
+<type>(<scope>): <summary, imperative, max 72 chars>
+
+<body: why this change was needed — omit if self-evident>
+
+<footer: BREAKING CHANGE: ..., Closes #N>
+```
+
+### Workflow for every change
+1. `git fetch origin main`
+2. `git checkout -b <type>/<slug> origin/main`
+3. Make changes, run tests
+4. `git push -u origin <branch-name>`
+5. Create PR for developer review — do not merge
+
+### PR creation
+- Title: `<type>: <summary>` (max 72 chars)
+- Body: what changed, why, how to test manually
+- Base branch: `main`
+- After creating: report the PR URL and stop — the developer merges
 </git>
 
 ## Security baseline
 
 <security>
-- All user input is untrusted. Validate at the boundary.
-- Secrets via environment variables or secret manager. Never in source.
+- All user input is untrusted. Validate at the boundary (length, type, range, format).
+- Secrets via environment variables or secret manager. Never in source. Never in git.
 - No string interpolation into queries. Use parameterized queries / ORMs.
-- Log security events but never log secrets.
+- Log security events but never log: auth tokens, session IDs, passwords, PII, API keys.
+- Authentication AND authorization on every protected route — never assume it was done elsewhere.
+- Cryptography: `bcrypt`/`argon2` for passwords; `crypto.randomBytes`/`secrets` module for tokens; never MD5/SHA1 for security.
+- NEVER disable TLS certificate verification (`verify=False`, `rejectUnauthorized: false`).
+- File uploads: validate MIME type, extension allowlist, enforce size limit.
+- HTML output: always escape user content. Never use `dangerouslySetInnerHTML` / `innerHTML` with user data.
+- Before every commit: scan diff for hardcoded credentials, `.env` files, private keys.
 </security>
 
 ## Glossary

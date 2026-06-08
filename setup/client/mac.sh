@@ -103,6 +103,12 @@ if [ -d "$REPO_ROOT/opencode/agent" ] && [ "$(ls -A "$REPO_ROOT/opencode/agent")
     ok "Installed agents to $CONFIG_DIR/agent/"
 fi
 
+if [ -d "$REPO_ROOT/opencode/skills" ] && [ "$(ls -A "$REPO_ROOT/opencode/skills")" ]; then
+    mkdir -p "$CONFIG_DIR/skills"
+    cp -r "$REPO_ROOT/opencode/skills/"* "$CONFIG_DIR/skills/" 2>/dev/null || true
+    ok "Installed skills to $CONFIG_DIR/skills/"
+fi
+
 # ----- Optional: Tailscale -----
 step "Tailscale (optional, for remote access)"
 if command -v tailscale >/dev/null 2>&1 || [ -d "/Applications/Tailscale.app" ]; then
@@ -160,6 +166,7 @@ echo "  /compact     Condense conversation when context fills"
 echo "  /help        Show all commands"
 echo ""
 echo "To set up project conventions, copy a template into your project:"
-echo "  cp $REPO_ROOT/templates/AGENTS.dotnet.md ~/your-project/AGENTS.md"
 echo "  cp $REPO_ROOT/templates/AGENTS.generic.md ~/your-project/AGENTS.md"
+echo "  cp $REPO_ROOT/templates/AGENTS.security-first.md ~/your-project/AGENTS.md  # security-sensitive projects"
+echo "  cp $REPO_ROOT/templates/AGENTS.dotnet.md ~/your-project/AGENTS.md          # .NET projects"
 echo ""
