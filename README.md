@@ -124,6 +124,7 @@ opencode-workflow/
 │   └── env.example                  # User config template
 ├── opencode/
 │   ├── command/                     # Reusable slash commands
+│   │   ├── setup-project.md         # /setup-project — bootstrap any project from scratch
 │   │   ├── branch.md                # /branch — create feature branch, never touches main
 │   │   ├── commit.md                # /commit — atomic commit with secret scanning
 │   │   ├── pr.md                    # /pr — create PR, never merges it
@@ -161,6 +162,7 @@ opencode-workflow/
 
 | Command | What it does |
 |---|---|
+| `/setup-project [stack]` | **Bootstraps everything** — clones this repo if missing, installs all commands/agents/skills, auto-detects your stack, generates a tailored `AGENTS.md` |
 | `/branch` | Creates a feature branch from main — **never touches main directly** |
 | `/commit` | Stages, scans for secrets, commits with conventional message, pushes to feature branch |
 | `/pr` | Creates a PR for your review — **never merges it** |
@@ -170,6 +172,21 @@ opencode-workflow/
 | `/review` | Code review with CRITICAL/HIGH/MEDIUM/LOW severity ratings |
 | `/plan` | Implementation plan with no code written — for scoping and review |
 | `/test` | Unit test generation matching your project's test conventions |
+
+### Quickstart on any new project
+
+```bash
+cd ~/your-project
+opencode
+# then type:
+/setup-project
+# or with a hint:
+/setup-project typescript next.js postgresql
+/setup-project python fastapi redis security
+/setup-project dotnet asp.net-core sqlserver
+```
+
+`/setup-project` will clone this repo if it isn't already installed, copy all commands/agents/skills into your OpenCode config, detect your tech stack from `package.json` / `go.mod` / `*.csproj` / etc., and write a tailored `AGENTS.md` to your project root.
 
 ## Subagents reference
 
