@@ -124,6 +124,7 @@ opencode-workflow/
 │   └── env.example                  # User config template
 ├── opencode/
 │   ├── command/                     # Reusable slash commands
+│   │   ├── init-all-repos.md        # /init-all-repos — one-time bulk init for all repos on machine
 │   │   ├── setup-project.md         # /setup-project — bootstrap any project from scratch
 │   │   ├── branch.md                # /branch — create feature branch, never touches main
 │   │   ├── commit.md                # /commit — atomic commit with secret scanning
@@ -162,7 +163,8 @@ opencode-workflow/
 
 | Command | What it does |
 |---|---|
-| `/setup-project [stack]` | **Bootstraps everything** — clones this repo if missing, installs all commands/agents/skills, auto-detects your stack, generates a tailored `AGENTS.md` |
+| `/init-all-repos [flags]` | **One-time bulk init** — scans all repos on the machine, detects each stack, writes tailored `AGENTS.md` to every repo. Use once to onboard your whole machine. |
+| `/setup-project [stack]` | **Per-project bootstrap** — clones this repo if missing, installs all commands/agents/skills, fully detects your stack, generates a complete `AGENTS.md` |
 | `/branch` | Creates a feature branch from main — **never touches main directly** |
 | `/commit` | Stages, scans for secrets, commits with conventional message, pushes to feature branch |
 | `/pr` | Creates a PR for your review — **never merges it** |
@@ -173,20 +175,35 @@ opencode-workflow/
 | `/plan` | Implementation plan with no code written — for scoping and review |
 | `/test` | Unit test generation matching your project's test conventions |
 
-### Quickstart on any new project
+### Onboard a single new project
 
 ```bash
 cd ~/your-project
 opencode
 # then type:
 /setup-project
-# or with a hint:
+# or with a stack hint:
 /setup-project typescript next.js postgresql
 /setup-project python fastapi redis security
 /setup-project dotnet asp.net-core sqlserver
 ```
 
-`/setup-project` will clone this repo if it isn't already installed, copy all commands/agents/skills into your OpenCode config, detect your tech stack from `package.json` / `go.mod` / `*.csproj` / etc., and write a tailored `AGENTS.md` to your project root.
+`/setup-project` clones this repo if not already installed, syncs all commands/agents/skills into your OpenCode config, detects your stack from `package.json` / `go.mod` / `*.csproj` / etc., and writes a tailored `AGENTS.md` to the project root.
+
+### Onboard all your existing repos at once
+
+Run this once from any project to bulk-initialize your whole machine:
+
+```bash
+opencode
+# then type:
+/init-all-repos              # dry-run first — shows the plan, writes nothing
+/init-all-repos --write      # apply to all repos missing an AGENTS.md
+/init-all-repos --write --overwrite   # also update repos that already have one
+/init-all-repos --path ~/projects     # scope to a specific directory
+```
+
+`/init-all-repos` scans common developer directories (`~/projects`, `~/code`, `~/dev`, etc.), fast-sniffs each repo's root files to detect the stack, picks the right template (generic, security-first, or dotnet), shows you a full plan table, waits for your `YES`, then writes. Repos it can't fully detect get a template with clear `TODO:` markers — run `/setup-project` in those repos to fill in the details.
 
 ## Subagents reference
 
