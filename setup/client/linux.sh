@@ -81,6 +81,12 @@ if [ -d "$REPO_ROOT/opencode/agent" ] && [ "$(ls -A "$REPO_ROOT/opencode/agent")
     ok "Installed agents"
 fi
 
+if [ -d "$REPO_ROOT/opencode/skills" ] && [ "$(ls -A "$REPO_ROOT/opencode/skills")" ]; then
+    mkdir -p "$CONFIG_DIR/skills"
+    cp -r "$REPO_ROOT/opencode/skills/"* "$CONFIG_DIR/skills/" 2>/dev/null || true
+    ok "Installed skills"
+fi
+
 # ----- Optional: Tailscale -----
 step "Tailscale (optional)"
 if command -v tailscale >/dev/null 2>&1; then
@@ -115,4 +121,29 @@ green "  Client setup complete"
 green "============================================"
 echo ""
 echo "Try it: cd ~/some-project && opencode"
+echo ""
+echo "Available commands inside OpenCode:"
+echo "  /init-all-repos  One-time: scan all repos on this machine and write AGENTS.md to each"
+echo "  /setup-project   Bootstrap any project — auto-detects stack, writes AGENTS.md"
+echo "  /branch          Create a feature branch (never commits to main)"
+echo "  /commit          Stage and commit with conventional message"
+echo "  /pr              Create a PR for review (never auto-merges)"
+echo "  /integrate-test  Generate hermetic integration tests"
+echo "  /security        Run a security audit on code or diff"
+echo "  /refactor        Safe refactor with test-first discipline"
+echo "  /review          Code review with severity ratings"
+echo "  /plan            Implementation planning (no code written)"
+echo "  /test            Generate unit tests"
+echo ""
+echo "Subagents (invoke with @name or /agent name):"
+echo "  @git-guardian       Enforces branch safety for all git ops"
+echo "  @integration-tester Writes hermetic integration tests"
+echo "  @security-auditor   Deep read-only security review"
+echo "  @code-reviewer      Senior read-only code reviewer"
+echo "  @debugger           Hypothesis-driven root cause analysis"
+echo ""
+echo "Project templates:"
+echo "  cp $REPO_ROOT/templates/AGENTS.generic.md ~/your-project/AGENTS.md"
+echo "  cp $REPO_ROOT/templates/AGENTS.security-first.md ~/your-project/AGENTS.md  # security-sensitive projects"
+echo "  cp $REPO_ROOT/templates/AGENTS.dotnet.md ~/your-project/AGENTS.md          # .NET projects"
 echo ""
