@@ -13,7 +13,6 @@ This lets you delegate specialized tasks to agents tuned for them, instead of as
 ```markdown
 ---
 description: One-line description of what this agent does
-tools: ["read", "grep", "glob"]  # optional, restricts which tools the agent can use
 ---
 
 You are a <specific role>.
