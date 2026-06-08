@@ -1,0 +1,9 @@
+# Ollama Modelfile — Context-tuned variant of base model.
+# Used by setup/server/* scripts to create a 32K-context variant.
+# Template variables {{...}} are replaced by setup scripts.
+#
+# To use manually:
+#   ollama create my-model -f Modelfile
+
+FROM {{OLLAMA_MODEL}}
+PARAMETER num_ctx {{OLLAMA_CONTEXT_LENGTH}}

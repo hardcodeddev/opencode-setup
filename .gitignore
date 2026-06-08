@@ -1,0 +1,21 @@
+# Personal config (created from env.example, may contain hostnames)
+config/env
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+
+# Local overrides
+*.local
+local.json
