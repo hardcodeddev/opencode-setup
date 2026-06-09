@@ -52,6 +52,28 @@ cd ~/opencode-setup && git pull && ./install.sh --update
 
 ---
 
+### Ollama already on this machine — just add OpenCode and skills
+
+If you're developing directly on the machine that runs Ollama (no remote server needed):
+
+**macOS / Linux:**
+```bash
+git clone https://github.com/hardcodeddev/opencode-setup.git ~/opencode-setup
+cd ~/opencode-setup
+./setup/client/local-dev.sh
+```
+
+**Windows (PowerShell):**
+```powershell
+git clone https://github.com/hardcodeddev/opencode-setup.git $HOME\opencode-setup
+cd $HOME\opencode-setup
+.\setup\client\local-dev.ps1
+```
+
+The script checks Ollama is running, lists your available models so you can pick one, installs OpenCode if missing, writes a `localhost` config, and copies all commands/agents/skills. Skips Tailscale entirely since you're already local.
+
+---
+
 ### Full setup from scratch
 
 ### 1. Set up the server (run once)
