@@ -82,22 +82,22 @@ On the machine with the GPU:
 
 **Windows:**
 ```powershell
-git clone https://github.com/<your-username>/opencode-workflow.git
-cd opencode-workflow
+git clone https://github.com/hardcodeddev/opencode-setup.git
+cd opencode-setup
 .\setup\server\windows.ps1
 ```
 
 **macOS:**
 ```bash
-git clone https://github.com/<your-username>/opencode-workflow.git
-cd opencode-workflow
+git clone https://github.com/hardcodeddev/opencode-setup.git
+cd opencode-setup
 ./setup/server/mac.sh
 ```
 
 **Linux:**
 ```bash
-git clone https://github.com/<your-username>/opencode-workflow.git
-cd opencode-workflow
+git clone https://github.com/hardcodeddev/opencode-setup.git
+cd opencode-setup
 ./setup/server/linux.sh
 ```
 
@@ -115,22 +115,22 @@ On every machine you want to code from:
 
 **Windows:**
 ```powershell
-git clone https://github.com/<your-username>/opencode-workflow.git
-cd opencode-workflow
+git clone https://github.com/hardcodeddev/opencode-setup.git
+cd opencode-setup
 .\setup\client\windows.ps1
 ```
 
 **macOS:**
 ```bash
-git clone https://github.com/<your-username>/opencode-workflow.git
-cd opencode-workflow
+git clone https://github.com/hardcodeddev/opencode-setup.git
+cd opencode-setup
 ./setup/client/mac.sh
 ```
 
 **Linux:**
 ```bash
-git clone https://github.com/<your-username>/opencode-workflow.git
-cd opencode-workflow
+git clone https://github.com/hardcodeddev/opencode-setup.git
+cd opencode-setup
 ./setup/client/linux.sh
 ```
 
@@ -161,7 +161,7 @@ Setup scripts read this file to template the OpenCode config and Ollama variant.
 ## What's in this repo
 
 ```
-opencode-workflow/
+opencode-setup/
 ├── README.md                        # You are here
 ├── install.sh                       # Smart installer for macOS/Linux (start here)
 ├── install.ps1                      # Smart installer for Windows (start here)
